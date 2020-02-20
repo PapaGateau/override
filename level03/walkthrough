@@ -1,0 +1,10 @@
+this program compares two strings, if the comparison is true it will call /bin/sh
+The first string goes throguh a decryption function that will xor each of its characters X number of times, where X is 322424845 - our input number
+however, unless the result of the substraction is between 1 and 21, it will use a rand generated number instead
+After inspecting the encrypted string we can see that it is a rot 18 of the second string
+this means we will simply have to enter a number that will result as 18 after substracting it to 322424845
+
+Password: 322424827
+$ cat /home/users/level04/.pass
+kgv3tkEb9h2mLkRsPkXRfc2mHbjMxQzvb2FrgKkf
+

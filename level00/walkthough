@@ -1,0 +1,2 @@
+scanf does %d of arg[1]
+result is compared to 0x149c ; 5276
