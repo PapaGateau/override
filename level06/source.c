@@ -1,5 +1,5 @@
-t
-is program has a call to /bin/sh but it is protected by a number of conditional jumps
+#include <stdio.h>
+#include <stdlib.h>
 
 int main()
 {
@@ -18,5 +18,3 @@ auth(Login ebp + 0x8, Serial ebp + 0xc)
 	temp = strnlen(Login, 32);
 	
 }
-
-
