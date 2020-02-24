@@ -1,22 +1,32 @@
-t
-is program has a call to /bin/sh but it is protected by a number of conditional jumps
+This program has a call to /bin/sh but it is protected by a number of conditional jumps
+We have two inputs: a login string and a serial number (unsigned int) 
 
-int main()
-{
-	fgets(esp + 0x2c, 32, stdin);	Login
+If the auth() function called by main returns 0, the /bin/sh call will occur
+It appears that the auth() function creates a hash number based on the login string then compares it to our serial number and returns zero if the hashed login and Serial number are the same
 
-	scanf(%u, esp + 0x28);	Serial
+A few conditions for the login string to be valid:
+- Size superior to 5
+- no characters inferior to 32 (ascii)
 
-	if (auth(Login, Serial))
-		system("/bin/sh");
-}
+Using gdb we can enter a valid string, find out its value after being turned to a hash, then restart the program using that hash value as serial!
 
-auth(Login ebp + 0x8, Serial ebp + 0xc)
-{
-	int	temp;
-	Login[strcspn('\n', Login)] = '\0';	Replaces '\n' with '\0'
-	temp = strnlen(Login, 32);
-	
-}
+The program checks if it is already being traced and will close if it is (eg ltrace, gdb). Therefore if we want to use gdb we will have to avoid this check.
 
+gdb level06
+(gdb) b *0x080487b5 ;	just before ptrace
+(gdb) b *0x08048866 ;	after the hashing loop
+(gdb) r
+-> Enter Login: bonjour
+-> Enter Serial: 0	; not important
 
+Breakpoint 1, 0x080487b5 in auth ()
+(gdb) jump *0x080487ed
+(gdb)  p *(int*)($ebp-0x10)
+$1 = 6233767
+
+./level06
+-> Enter Login: bonjour
+-> Enter Serial: 6233767
+Authenticated!
+$ cat /home/users/level07/.pass
+GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8
