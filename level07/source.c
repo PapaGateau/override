@@ -43,7 +43,7 @@ int read_number(int *var6) {
 }
 
 int main(int argc, char *argv[], char *envp[]) {
-    int var6 = 0; // ESP + 0x24
+    char var6[0x64]; // ESP + 0x24
     char **av = argv; // ESP + 0x1c
     char **ep = envp; // ESP + 0x18
     int var42 = 0;// ESP + 0x14
@@ -56,8 +56,7 @@ int main(int argc, char *argv[], char *envp[]) {
     int var4 = 0; // ESP + 0x1c4
     int var5 = 0; // ESP + 0x1c8
 
-    char str[0x64]; // TODO Fix this maybe not 0x64
-    memset(str, 0, 0x64); // = 100
+    memset(var6, 0, 0x64); // = 100
 
     while (*av) {
         var42 = -1;
