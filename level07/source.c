@@ -85,7 +85,7 @@ int main(int argc, char *argv[], char *envp[]) {
             // stack fail check
             return 0;
         }
-        if (cmd_ret == 0) {
+        if (cmd_ret == 0) { // TODO Maybe false
             printf(" Completed %s command successfully\n", &var1);
             memset(&var1, 0, 0x14);
         } else {
