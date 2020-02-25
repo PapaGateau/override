@@ -3,6 +3,45 @@
 #include <stdlib.h>
 #include <string.h>
 
+unsigned int get_unum(void) {
+    unsigned int var1 = 0;
+
+    fflush(stdout);
+    scanf("%u", &var1);
+    return var1;
+}
+
+// prog_timeout
+
+int store_number(int *var6) {
+    unsigned int num0; // EBP - 0x10
+    unsigned int num1; // EBP - 0xc
+
+    printf(" Number: ");
+    num0 = get_unum();
+    printf(" Index: ");
+    num1 = get_unum();
+
+    if ((((num1 * 0xaaaaaaab) >> 1) * 3) - num1) {
+        if (num0 >> 0x18 != 0xb7) {
+            *((num1 << 2) + var6) = num0;
+        }
+    }
+    puts(" *** ERROR! ***");
+    puts("   This index is reserved for wil!");
+    puts(" *** ERROR! ***");
+    return 1;
+}
+
+int read_number(int *var6) {
+    unsigned int num0 = 0; // EBP - 0xc
+
+    printf(" Index:");
+    num0 = get_unum();
+    printf(" Number at data[%u] is %u\n", num0, *((num0 << 2) + var6));
+    return 0;
+}
+
 int main(int argc, char *argv[], char *envp[]) {
     int var6 = 0; // ESP + 0x24
     char **av = argv; // ESP + 0x1c
