@@ -32,7 +32,7 @@ void set_username(char *buffer) {
 void handle_msg() {
     
     char buffer[180]; //inaccurate, its likely bigger
-    int32_t buffer_size = 180; // placed right after buffer in memory
+    int32_t buffer_size = 180; // buffer+180 on stack // placed right after buffer in memory
     set_username(buffer);
     set_msg(buffer, &buffer_size);
 }

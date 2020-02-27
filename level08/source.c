@@ -12,9 +12,12 @@ int main(int argc, char *argv[]) {
     if (ac != 2) {
         printf("Usage: %s filename\n");
     }
-    FILE *open_ret;
+
+    FILE *open_ret; // EBP - 0x88
     if (!(open_ret = fopen("./backups/.log", "w"))) {
         printf("ERROR: Failed to open%s\n", "./backups/.log");
+        exit(1);
     }
 
+    
 }
