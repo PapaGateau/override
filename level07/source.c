@@ -3,93 +3,96 @@
 #include <stdlib.h>
 #include <string.h>
 
+void clear_stdin() {
+    int8_t val = 0;
+
+    while (1) {
+        val = getchar();
+        if (val == '\n' || val == EOF) {
+            return;
+        }
+    }
+}
+
 unsigned int get_unum(void) {
-    unsigned int var1 = 0;
+    uint32_t var1 = 0;
 
     fflush(stdout);
     scanf("%u", &var1);
+    clear_stdin();
     return var1;
 }
 
-// prog_timeout
-
-int store_number(int *var6) {
-    unsigned int num0; // EBP - 0x10
-    unsigned int num1; // EBP - 0xc
-
-    printf(" Number: ");
-    num0 = get_unum();
-    printf(" Index: ");
-    num1 = get_unum();
-
-    if ((((num1 * 0xaaaaaaab) >> 1) * 3) - num1) {
-        if (num0 >> 0x18 != 0xb7) {
-            *((num1 << 2) + var6) = num0;
-        }
-    }
-    puts(" *** ERROR! ***");
-    puts("   This index is reserved for wil!");
-    puts(" *** ERROR! ***");
-    return 1;
+void prog_timeout() {
+    exit(1);
 }
 
-int read_number(int *var6) {
-    unsigned int num0 = 0; // EBP - 0xc
+int store_number(int32_t *buffer) {
+    uint32_t number; // EBP - 0x10
+    uint32_t index; // EBP - 0xc
+
+    printf(" Number: ");
+    number = get_unum();
+    printf(" Index: ");
+    index = get_unum();
+
+    if (!(index % 3) || number >> 0x18 != 0xb7) {
+        puts(" *** ERROR! ***");
+        puts("   This index is reserved for wil!");
+        puts(" *** ERROR! ***");
+        return 1;
+    }
+    buffer[index] = number;
+    return 0;
+}
+
+int read_number(int32_t *buffer) {
+    uint32_t index = 0; // EBP - 0xc
 
     printf(" Index:");
-    num0 = get_unum();
-    printf(" Number at data[%u] is %u\n", num0, *((num0 << 2) + var6));
+    index = get_unum();
+    printf(" Number at data[%u] is %u\n", index, buffer[index]);
     return 0;
 }
 
 int main(int argc, char *argv[], char *envp[]) {
-    char var6[0x64]; // ESP + 0x24
-    char **av = argv; // ESP + 0x1c
-    char **ep = envp; // ESP + 0x18
-    int var42 = 0;// ESP + 0x14
-    char *storage = 0; // Fix this ????? // ESP + 0x1cc
+    int8_t buffer[0x64] = {0}; // ESP + 0x24
+    int8_t **av = argv; // ESP + 0x1c
+    int8_t **ep = envp; // ESP + 0x18
 
-    int cmd_ret = 0; // ESP + 0x1b4
-    char *var1 = 0; // ESP + 0x1b8 // TODO Probably a char [0x14] set to 0
-    int var2 = 0; // ESP + 0x1bc
-    int var3 = 0; // ESP + 0x1c0
-    int var4 = 0; // ESP + 0x1c4
-    int var5 = 0; // ESP + 0x1c8
-
-    memset(var6, 0, 0x64); // = 100
+    int32_t cmd_ret = 0; // ESP + 0x1b4
+    int8_t cmd_buffer[20] = {0}; // ESP + 0x1b8
 
     while (*av) {
-        var42 = -1;
-        memset(*av, 0, strnlen(*av, var42)); // Not really strlen but optimized version
+        memset(*av, 0, strlen(*av));
         *av++;
     }
     while (*ep) {
-        var42 = -1;
-        memset(*ep, 0, strnlen(*ep, var42)); // Not really strlen but optimized version
+        memset(*ep, 0, strlen(*ep));
         *ep++;
     }
+
     puts("----------------------------------------------------\n  Welcome to wil's crappy number storage service!   \n----------------------------------------------------\n Commands:                                          \n    store - store a number into the data storage    \n    read  - read a number from the data storage     \n    quit  - exit the program                        \n----------------------------------------------------\n   wil has reserved some storage :>                 \n----------------------------------");
     
     while (1) {
         printf("Input command: ");
-        fgets(&var1, 0x14, stdin);
-        var1[strnlen(&var1, var42)] = 0;
+        fgets(cmd_buffer, 0x14, stdin);
+        cmd_buffer[strlen(&cmd_buffer) - 1] = 0;
 
-        if (!strncmp(var1, "store", 5)) {
-            cmd_ret = store_number(&var6);
-        } else if (!strncmp(var1, "read", 4)) {
-            cmd_ret = read_number(&var6);
-        } else if (!strncmp(var1, "quit", 4)) {
-            // Do something with storage
-            // stack fail check
+        if (!strncmp(cmd_buffer, "store", 5)) {
+            cmd_ret = store_number(buffer);
+        } else if (!strncmp(cmd_buffer, "read", 4)) {
+            cmd_ret = read_number(buffer);
+        } else if (!strncmp(cmd_buffer, "quit", 4)) {
             return 0;
         }
-        if (cmd_ret == 0) { // TODO Maybe false
-            printf(" Completed %s command successfully\n", &var1);
-            memset(&var1, 0, 0x14);
+
+        if (cmd_ret == 0) {
+            printf(" Completed %s command successfully\n", &cmd_buffer);
         } else {
-            printf(" Failed to do %s command\n", &var1);
+            printf(" Failed to do %s command\n", &cmd_buffer);
         }
+        memset(&cmd_buffer, 0, 0x14);
     }
-        
+    return 0;
 }
