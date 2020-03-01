@@ -2,39 +2,60 @@
 #include <stdlib.h>
 #include <strings.h>
 
-void set_msg(char *buffer, int32_t *buffer_size) {
-    char new_buff[400];
+typedef struct s_message
+{
+    char text[140];
+    char username[40];
+    int len;
+} t_message;
 
-    memset(new_buff, '\0', 0x80); // 128
-    puts(">: Msg @Unix-Dude");
-    printf(">>: ");
-    fgets(new_buff, 0x400, stdin);
-    strncpy(buffer, new_buff, *buffer_size); // 0x8c ; 140
+void secret_backdoor() {
+    char buffer[128];
+
+    fgets(buffer, 128, stdin);
+    system(buffer);
 }
 
-void set_username(char *buffer) {
+void set_msg(t_message *message) {
+    char local_buffer[0x400]; // 1024
+
+    memset(local_buffer, '\0', 0x400); // 128
+
+    puts(">: Msg @Unix-Dude");
+    printf(">>: ");
+    fgets(local_buffer, 0x400, stdin);
+    strncpy(message->text, local_buffer, message->len); // 0x8c ; 140
+}
+
+void set_username(t_message *message) {
     int32_t i;
-    char new_buff[144];
+    char local_buffer[0x80]; // 128
     
-    bzero(new_buff, 16);
+    memset(local_buffer, 0, 0x80); // 128
+
     puts(">: Enter your username");
     printf(">>: ");
-    fgets(new_buff, 0x80, stdin);
-    *(int32_t *)(new_buff + 140) = 0;
-    i = 0;
-    while (i <= 0x28 && new_buff[i]) {
-        buffer[i + 140] = new_buff[i];
-        i++;
+    fgets(local_buffer, 0x80, stdin); // 128
+
+    *(int32_t *)(local_buffer + 140) = 0;
+
+    for (i = 0; i <= 0x28 && local_buffer[i]; i++) {
+        message->username[i] = local_buffer[i];
     }
-    printf(">: Welcome, %s", buffer + 140);
+
+    printf(">: Welcome, %s", message->username);
 }
 
 void handle_msg() {
-    
-    char buffer[180]; //inaccurate, its likely bigger
-    int32_t buffer_size = 180; // buffer+180 on stack // placed right after buffer in memory
-    set_username(buffer);
-    set_msg(buffer, &buffer_size);
+    t_message message;
+
+    memset(message.username, 0, 0x28); // 40
+    message.len = 0x8c; // 140
+
+    set_username(&message);
+    set_msg(&message);
+
+    puts(">: Msg sent!");
 }
 
 int main() {
