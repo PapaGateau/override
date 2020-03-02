@@ -17,7 +17,7 @@ Using an ascii table and checking repeated characters, we notice that the first 
 
 The first string passes through the `decrypt()` function before the comparison. This function seems to xor the the characters of the string in a loop and repeats the process based on a value received in parameters.
 
-Our input string for the password prompt is received through `scanf(%u)`. If the difference between our input value and `322424845` is greater than `0x15` (21) the decrypt function will use a `rand()` generated number for its operations, otherwise it will use the resulting difference.		
+Our input string for the password prompt is received through `scanf(%u)`. If the difference between our input value and `322424845` is not within the limits `1-9` or `16-21` the decrypt function will use a `rand()` generated number for its operations, otherwise it will use the resulting difference.		
 
 The `decrypt()` function performs the equivalent of a rot+1 with each loop, so if we input the correct value, we should be able to match the two strings and reach the `/bin/sh` call!
 
