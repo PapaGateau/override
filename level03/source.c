@@ -43,54 +43,27 @@ void decrypt(uint32_t rot) {
 }
 
 void test(uint32_t user_pwd, uint32_t real_pwd) {
-    switch (real_pwd - user_pwd)
+    uint32_t diff = real_pwd - user_pwd;
+
+    switch (diff)
     {
-    case 0x1:
-        decrypt(0x1);
-        break;
+    case 0x1: // 1
     case 0x2:
-        decrypt(0x2);
-        break;
     case 0x3:
-        decrypt(0x3);
-        break;
     case 0x4:
-        decrypt(0x4);
-        break;
     case 0x5:
-        decrypt(0x5);
-        break;
     case 0x6:
-        decrypt(0x6);
-        break;
     case 0x7:
-        decrypt(0x7);
-        break;
     case 0x8:
-        decrypt(0x8);
-        break;
-    case 0x9:
-        decrypt(0x9);
-        break;
-    case 0x10:
-        decrypt(0x10);
-        break;
+    case 0x9: // 9
+    case 0x10: // 16
     case 0x11:
-        decrypt(0x11);
-        break;
     case 0x12:
-        decrypt(0x12);
-        break;
     case 0x13:
-        decrypt(0x13);
-        break;
     case 0x14:
-        decrypt(0x14);
+    case 0x15: // 21
+        decrypt(diff);
         break;
-    case 0x15:
-        decrypt(0x15);
-        break;
-    
     default:
         decrypt(rand());
         break;
